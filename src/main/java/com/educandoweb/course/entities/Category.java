@@ -8,6 +8,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import java.util.Set;
 import java.util.HashSet;
+import jakarta.persistence.ManyToMany;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table (name = "tb_category")
@@ -20,6 +22,8 @@ public class Category implements Serializable {
 	private String name;
 	
 	// ASSOCIATIONS
+	@JsonIgnore
+	@ManyToMany (mappedBy = "categories")
 	private Set<Product> products = new HashSet<>();
 	
 	public Category() {
