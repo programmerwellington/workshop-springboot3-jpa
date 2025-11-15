@@ -11,6 +11,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table (name = "tb_product")
@@ -31,6 +33,9 @@ public class Product implements Serializable {
 				joinColumns = @JoinColumn (name = "product_id"),
 				inverseJoinColumns = @JoinColumn (name = "category_id"))
 	private Set<Category> categories = new HashSet<>();
+	
+	@OneToMany (mappedBy = "id.product")
+	private Set<OrderItem> items = new HashSet<>();
 	
 	public Product() {
 	}
@@ -85,6 +90,15 @@ public class Product implements Serializable {
 
 	public Set<Category> getCategories() {
 		return categories;
+	}
+	
+	@JsonIgnore
+	public Set<Order> getOrders() {
+		Set<Order> set = new HashSet<>();
+		for (OrderItem x : items) {
+			set.add(x.getOrder());
+		}
+		return set;
 	}
 
 	@Override
